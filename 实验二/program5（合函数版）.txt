@@ -1,0 +1,102 @@
+import java.util.Scanner;
+
+public class program {
+
+	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+		System.out.println("4 ，指visa卡\n" + "5 ，指master卡\n" + "37，指American Express卡\n" + 
+				"6 ，指Discovery卡\n" + "请输入信用卡号(13-16位数):");
+		long cardNumber = input.nextLong();
+		if(isValid(cardNumber))
+			System.out.println("卡号 " + cardNumber +" 是合法的");
+		else
+			System.out.println("卡号 " + cardNumber + " 是不合法的");
+	}
+	    //判断卡号是否合法
+	    public static boolean isValid(long number)
+	    {
+   	    	boolean prefix = false;
+	    	if(number<1E13 || number>=1E17)
+	    		return false;
+	    	else
+	    	{
+		    	long sumEven = 0;   //偶数位扩大两倍后的的得到的一位数的和
+		    	long sumOdd = 0;    //奇数位的个位数之和
+		    	long sum = 0;       //sum表示奇数和偶数的个位数的和相加的结果
+		    	long sh = 10;       //控制number从右向左一位一位的移动
+		    	int a = 1;
+		   	    while(number/sh!=0)  //判断number是否已经求和结束
+		   	    {
+		   	    	long temp = 0;    //暂时存储奇数位数和偶数位*2的数
+		   	    	if(a%2==0)        //如果是偶数位
+		   	    	{
+		   	    		temp = ( number % sh )  / ( sh / 10 ) * 2;
+		   	    		System.out.println("\n temp Even " + temp);
+		   	    		if(temp>9)
+		   	    		{
+		   	    			sumEven += temp / 10 + temp % 10;
+		   	    		}
+		   	    		else
+		   	    		{
+		   	    			sumEven += temp;
+		   	    		}
+		   	    	}
+		   	    	else        //奇数位
+		   	    	{
+		   	    		temp = number % sh  / ( sh / 10 );
+		   	    		System.out.println("\n temp Odd " + temp);		   	  
+		   	    		sumOdd += temp;
+		   	    	}
+
+		   	    	if( (number/(sh*100)) == 0)     //判断卡号前两位是否符合标准
+		   	    	{
+		   	    		long topTwoDigit = number / sh;
+		   	    		System.out.println("\n topTwoDigit " + topTwoDigit);		   	    		
+		   	    		if(topTwoDigit==37) 
+		   	    			prefix = true;
+		   	    	}
+		   	    	sh *= 10;
+		   	    	a++;
+		   	   }
+		   	    
+	   	    	long temp2 = 0;    //暂时存储奇数位数和偶数位*2的数		   	    	
+   	    		if(a%2==0)        //如果是偶数位
+	   	    	{
+	   	    		temp2 = ( number % sh )  / ( sh / 10 ) * 2;
+	   	    		System.out.println("\n temp Even " + temp2);
+	   	    		if(temp2>9)
+	   	    		{
+	   	    			sumEven += temp2 / 10 + temp2 % 10;
+	   	    		}
+	   	    		else
+	   	    		{
+	   	    			sumEven += temp2;
+	   	    		}
+		    		if( (temp2 / 2 == 4) || (temp2 / 2 == 5) || (temp2 / 2 == 6) )
+	   	    			prefix = true;
+	   	    		else
+	   	    			prefix = false;	   	    		
+	   	    	}
+	   	    	else        //奇数位
+	   	    	{
+	   	    		temp2 = number % sh  / ( sh / 10 );
+	   	    		System.out.println("\n temp Odd " + temp2);		   	  
+	   	    		sumOdd += temp2;
+		    		if( (temp2  == 4) || (temp2  == 5) || (temp2  == 6) )
+	   	    			prefix = true;
+	   	    		else
+	   	    			prefix = false;		   	    		
+	   	    	}
+   	    		
+
+		   	    boolean result1 = false;
+		   	    sum = sumEven + sumOdd;
+		   	    if(prefix)
+		   	    {
+		   	    	if(sum % 10 == 0)
+			        	result1 = true;
+		   	    }		   	    	
+		        return result1;	   	    
+	    	}
+    }
+}
